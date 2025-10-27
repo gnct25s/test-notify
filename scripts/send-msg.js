@@ -34,6 +34,7 @@ function shouldSendEvening(now) {
 }
 
 function shouldSendMorning(now) {
+    return true
     /*
   const hour = now.getHours();
   const minute = now.getMinutes();
