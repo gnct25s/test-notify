@@ -28,4 +28,4 @@ jobs:
         env:
           LINE_ACCESS_TOKEN: ${{ secrets.LINE_ACCESS_TOKEN }}
           LINE_GROUP_ID: ${{ secrets.LINE_GROUP_ID }}
-        run: node scripts/send-message.js               # お好みで
+        run: node scripts/send-msg.js               # お好みで
