@@ -34,6 +34,7 @@ function shouldSendEvening(now) {
 }
 
 function shouldSendMorning(now) {
+    /*
   const hour = now.getHours();
   const minute = now.getMinutes();
   const dayOfWeek = now.getDay();
@@ -45,6 +46,7 @@ function shouldSendMorning(now) {
   const isValidDay = dayOfWeek >= 1 && dayOfWeek <= 5;
   
   return isCorrectTime && isValidDay;
+    */
 }
 
 async function main() {
