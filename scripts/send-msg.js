@@ -9,7 +9,7 @@ const LINE_API_URL = 'https://api.line.me/v2/bot/message/push'
 const ACCESS_TOKEN = process.env.LINE_ACCESS_TOKEN
 const GROUP_ID = process.env.LINE_GROUP_ID
 
-const today = new Date();
+const today = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Tokyo"}));
 const dateStr = today.toISOString().split('T')[0];
 
 function formatDate(date) {
@@ -51,7 +51,7 @@ function shouldSendMorning(now) {
 }
 
 async function main() {
-    const now = new Date()
+    const now = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Tokyo"}))
     const dayOfWeek = now.getDay()
 
     if (dayOfWeek === 6) {
