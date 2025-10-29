@@ -50,6 +50,16 @@ function shouldSendEvening(now) {
 async function main() {
     const now = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Tokyo"}))
     const dayOfWeek = now.getDay()
+    
+    // ===== デバッグ出力 =====
+  console.log('=== Debug Info ===');
+  console.log('Current JST:', now.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }));
+  console.log('Hour:', now.getHours());
+  console.log('Minute:', now.getMinutes());
+  console.log('Day of Week:', now.getDay(), '(0=Sun, 6=Sat)');
+  console.log('ISO String:', now.toISOString());
+  console.log('==================');
+  // ====================
 
     if (dayOfWeek === 6) {
         console.log("It's Saturday. No messages will be sent.")
