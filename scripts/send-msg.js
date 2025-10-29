@@ -38,7 +38,7 @@ function shouldSendEvening(now) {
   const dayOfWeek = now.getDay();
   
   // 16:00 ~ 17:00 に拡大
-  const isCorrectTime = hour === 16;
+  const isCorrectTime = hour === 16 || hour === 18;
   
   // 月〜金、または日曜日
   const isValidDay = (dayOfWeek >= 1 && dayOfWeek <= 5) || dayOfWeek === 0;
