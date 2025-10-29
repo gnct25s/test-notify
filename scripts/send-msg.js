@@ -58,6 +58,8 @@ async function main() {
   console.log('Current JST:', now.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }));
   console.log('Hour:', now.getHours());
   console.log('Minute:', now.getMinutes());
+    console.log('Date:', now.getDate())
+    console.log('Tomorrow', now.getDate() + 1)
   console.log('Day of Week:', now.getDay(), '(0=Sun, 6=Sat)');
   console.log('ISO String:', now.toISOString());
   console.log('==================');
