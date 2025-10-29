@@ -131,10 +131,10 @@ async function sendToLine(message) {
 
 function getJSTDate() {
   // 日本時間の文字列を取得してDateオブジェクト化
-  const jstString = new Date().toLocaleString('en-US', { 
-    timeZone: 'Asia/Tokyo' 
-  });
-  return new Date(jstString);
+  const now = new Date()
+  const jst = new Date(now.getTime() + 9*60*60*1000)
+
+  return jst
 }
 
 main().catch((error) => {
