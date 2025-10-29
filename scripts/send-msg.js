@@ -19,30 +19,30 @@ function formatDate(date) {
     return `${year}-${month}-${day}`;
 }
 
-function shouldSendEvening(now) {
-  const hour = now.getHours();
-  const minute = now.getMinutes();
-  const dayOfWeek = now.getDay(); // 0=日, 1=月, ..., 6=土
-  
-  // 16:05 ~ 16:15 の範囲内
-  const isCorrectTime = hour === 16 && minute >= 5 && minute <= 15;
-  
-  // 月〜金、または日曜日
-  const isValidDay = (dayOfWeek >= 1 && dayOfWeek <= 5) || dayOfWeek === 0;
-  
-  return isCorrectTime && isValidDay;
-}
-
 function shouldSendMorning(now) {
   const hour = now.getHours();
   const minute = now.getMinutes();
   const dayOfWeek = now.getDay();
   
-  // 08:25 ~ 08:35 の範囲内
-  const isCorrectTime = hour === 8 && minute >= 25 && minute <= 35;
+  // 08:00 ~ 09:00 に拡大
+  const isCorrectTime = hour === 8;
   
   // 月〜金のみ
   const isValidDay = dayOfWeek >= 1 && dayOfWeek <= 5;
+  
+  return isCorrectTime && isValidDay;
+}
+
+function shouldSendEvening(now) {
+  const hour = now.getHours();
+  const minute = now.getMinutes();
+  const dayOfWeek = now.getDay();
+  
+  // 16:00 ~ 17:00 に拡大
+  const isCorrectTime = hour === 16;
+  
+  // 月〜金、または日曜日
+  const isValidDay = (dayOfWeek >= 1 && dayOfWeek <= 5) || dayOfWeek === 0;
   
   return isCorrectTime && isValidDay;
 }
