@@ -52,7 +52,7 @@ async function main() {
     
     // ===== デバッグ出力 =====
   console.log('=== Debug Info ===');
-  console.log('Current JST:', now);
+  console.log('Current JST:', now.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }));
   console.log('Hour:', now.getHours());
   console.log('Minute:', now.getMinutes());
   console.log('Day of Week:', now.getDay(), '(0=Sun, 6=Sat)');
