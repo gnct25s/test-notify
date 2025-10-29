@@ -75,7 +75,7 @@ async function main() {
     let isEvenig = shouldSendEvening(now)
 
     if (isMorning) {
-        targetDate = now;
+        targetDate = new Date(now)
     } else if (isEvenig) {
         targetDate = new Date(now)
         targetDate.setDate(now.getDate() + 1)
@@ -83,14 +83,15 @@ async function main() {
         console.log("Not the right time to send messages.")
         return
     }
-
-    const dateStr = formatDate(targetDate)
-    const filePath = `./schedules/${dateStr}.json`
+    
+    const filePath = `./schedules/${targetDate.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-{String(now.getDate()).padStart(2, '0')}.json`
 
     if (!fs.existsSync(filePath)) {
         console.log(`No schedule file for ${dateStr}.`)
         return
     }
+    
+    console.log(filePath)
 
     const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
     const message = generateMessage(dateStr, data);
