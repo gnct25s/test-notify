@@ -85,13 +85,11 @@ async function main() {
     }
     
     const filePath = `./schedules/${targetDate.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-{String(now.getDate()).padStart(2, '0')}.json`
-
+    console.log(filePath)
     if (!fs.existsSync(filePath)) {
         console.log(`No schedule file for ${dateStr}.`)
         return
     }
-    
-    console.log(filePath)
 
     const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
     const message = generateMessage(dateStr, data);
