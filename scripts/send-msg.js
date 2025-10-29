@@ -94,7 +94,7 @@ async function main() {
     const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
     const message = generateMessage(dateStr, data);
     console.log(message)
-    //await sendToLine(message)
+    await sendToLine(message)
 }
 
 function generateMessage(dateStr, data) {
