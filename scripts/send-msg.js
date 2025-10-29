@@ -97,9 +97,9 @@ async function main() {
 function generateMessage(_isMorning, _targetDate, _data) {
     let message = ""
     if (_isMorning) {
-        message = `[${_targetDate.getFullYear}-${String(_targetDate.getMonth() + 1).padStart(2, '0')}-${String(_targetDate.getDate()).padStart(2, '0')}]\n`;
+        message = `[${_targetDate.getFullYear()}-${String(_targetDate.getMonth() + 1).padStart(2, '0')}-${String(_targetDate.getDate()).padStart(2, '0')}]\n`;
     } else {
-        message = `[${_targetDate.getFullYear}-${String(_targetDate.getMonth() + 1).padStart(2, '0')}-${String(_targetDate.getDate()).padStart(2, '0')}の予定]\n`;
+        message = `[${_targetDate.getFullYear()}-${String(_targetDate.getMonth() + 1).padStart(2, '0')}-${String(_targetDate.getDate()).padStart(2, '0')}の予定]\n`;
     }
 
     for (let i=1; i<=_data.data.class; i++) {
