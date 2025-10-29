@@ -84,7 +84,7 @@ async function main() {
         return
     }
     
-    const filePath = `./schedules/${targetDate.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-{String(now.getDate()).padStart(2, '0')}.json`
+    const filePath = `./schedules/${targetDate.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.json`
     console.log(filePath)
     if (!fs.existsSync(filePath)) {
         console.log(`No schedule file for ${dateStr}.`)
