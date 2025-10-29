@@ -16,8 +16,7 @@ function formatDate(date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-}
+    
 
 function shouldSendMorning(now) {
   const hour = now.getHours();
@@ -48,12 +47,12 @@ function shouldSendEvening(now) {
 }
 
 async function main() {
-    const now = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Tokyo"}))
+    const now = getJSTDate()
     const dayOfWeek = now.getDay()
     
     // ===== デバッグ出力 =====
   console.log('=== Debug Info ===');
-  console.log('Current JST:', now.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }));
+  console.log('Current JST:', now);
   console.log('Hour:', now.getHours());
   console.log('Minute:', now.getMinutes());
   console.log('Day of Week:', now.getDay(), '(0=Sun, 6=Sat)');
@@ -128,6 +127,14 @@ async function sendToLine(message) {
     } catch (error) {
         console.error('Error sending message:', error.response?.data || error.message)
     }
+}
+
+function getJSTDate() {
+  // 日本時間の文字列を取得してDateオブジェクト化
+  const jstString = new Date().toLocaleString('en-US', { 
+    timeZone: 'Asia/Tokyo' 
+  });
+  return new Date(jstString);
 }
 
 main().catch((error) => {
