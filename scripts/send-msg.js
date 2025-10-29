@@ -89,16 +89,21 @@ async function main() {
     }
 
     const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
-    const message = generateMessage(dateStr, data);
+    const message = generateMessage(isMorning, targetDate, data);
     console.log(message)
     await sendToLine(message)
 }
 
-function generateMessage(dateStr, data) {
-    let message = `[${dateStr}]\n`;
+function generateMessage(_isMorning, _targetDate, _data) {
+    let message = ""
+    if (_isMorning) {
+        message = `[${_targetDate.getFullYear}-${String(_targetDate.getMonth() + 1).padStart(2, '0')}-${String(_targetDate.getDate()).padStart(2, '0')}]\n`;
+    } else {
+        message = `[${_targetDate.getFullYear}-${String(_targetDate.getMonth() + 1).padStart(2, '0')}-${String(_targetDate.getDate()).padStart(2, '0')}の予定]\n`;
+    }
 
-    for (let i=1; i<=data.data.class; i++) {
-        const content = data.text[String(i)] || ""
+    for (let i=1; i<=_data.data.class; i++) {
+        const content = _data.text[String(i)] || ""
         message += `${i}限: ${content}\n`
     }
 
