@@ -19,8 +19,6 @@ function formatDate(date) {
 }
 
 function shouldSendMorning(now) {
-    return true; // 一時的に常にtrueに設定
-    /*
   const hour = now.getHours();
   const minute = now.getMinutes();
   const dayOfWeek = now.getDay();
@@ -32,7 +30,6 @@ function shouldSendMorning(now) {
   const isValidDay = dayOfWeek >= 1 && dayOfWeek <= 5;
   
   return isCorrectTime && isValidDay;
-  */
 }
 
 function shouldSendEvening(now) {
@@ -84,7 +81,7 @@ async function main() {
         return
     }
     
-    const filePath = `./schedules/${targetDate.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.json`
+    const filePath = `./schedules/${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, '0')}-${String(targetDate.getDate()).padStart(2, '0')}.json`
     console.log(filePath)
     if (!fs.existsSync(filePath)) {
         console.log(`No schedule file for ${dateStr}.`)
