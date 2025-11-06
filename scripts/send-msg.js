@@ -1,6 +1,5 @@
 import axios from "axios";
 import fs from "fs";
-import path from "path";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -16,7 +15,6 @@ const dateStr = today.toISOString().split("T")[0];
 
 function shouldSendMorning(now) {
   const hour = now.getHours();
-  const minute = now.getMinutes();
   const dayOfWeek = now.getDay();
 
   // 08:00 ~ 09:00 に拡大
