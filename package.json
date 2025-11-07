@@ -1,11 +1,13 @@
 {
-    "type": "module",
-    "dependencies": {
-        "axios":"^1.6.0",
-        "dotenv":"^16.3.0"
-    },
-    "scripts": {
-        "send": "node scripts/send-msg.js"
-    }
-} 
-
+  "type": "module",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "discord.js": "^14.24.2",
+    "dotenv": "^16.6.1",
+    "node-cron": "^4.2.1"
+  },
+  "scripts": {
+    "send": "node scripts/send-msg.js",
+    "discord": "node scripts/discord.js"
+  }
+}

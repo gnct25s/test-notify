@@ -1,6 +1,7 @@
 import axios from "axios";
 import fs from "fs";
 import dotenv from "dotenv";
+import { Client, GatewayIntentBits, Partials } from "discord.js";
 
 dotenv.config();
 
@@ -154,6 +155,17 @@ function getJSTDate() {
 
   return jst;
 }
+
+const client new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildBans,
+    GatewayIntentBits.GuildEmojisAndStickers,
+    GatewayIntentBits.GuildIntegrations,
+    GatewayIntentBits.GuildWebhooks,
+  ]
+})
 
 main().catch((error) => {
   console.error("Unexpected error:", error);
