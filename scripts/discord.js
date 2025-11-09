@@ -39,7 +39,7 @@ async function main() {
   tomorrow.setDate(now.getDate() + 1);
 
   console.log(
-    `--- ${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, "0")}/${String(now.getDate()).padStart(2, "0")} ---`,
+    `--- ${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, "0")}/${String(now.getDate()).padStart(2, "0")} ${now.getHours()} : ${now.getMinutes()} ---`,
   );
 
   console.log("🚀 Starting bot...");
