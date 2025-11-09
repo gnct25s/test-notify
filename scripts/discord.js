@@ -50,7 +50,7 @@ async function main() {
   await new Promise((resolve) => client.once(Events.ClientReady, resolve));
   console.log(`✅ Logged in as ${client.user.tag}`);
 
-  cron.schedule("33 17 * * 0-5", () => {
+  cron.schedule("15 16 * * 0-5", () => {
     sendTextMessage(tomorrow);
   });
 }
