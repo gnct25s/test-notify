@@ -34,7 +34,7 @@ const commandFiles = fs
   .readdirSync(commandPath)
   .filter((file) => file.endsWith(".js"));
 
-async function sendMessage(text) {
+async function sendMessage(text, isMention = false) {
   try {
     if (!client.isReady()) {
       console.warn("Client not ready yet, waiting...");
@@ -47,7 +47,9 @@ async function sendMessage(text) {
       return;
     }
 
-    await channel.send(text);
+    const finalMessage = isMention ? `@everyone\n{text}` : text;
+
+    await channel.send(finalMessage);
     console.log(`✅ Message sent: \n ${text}`);
   } catch (err) {
     console.error("❌ Failed to send message:", err);
@@ -130,13 +132,13 @@ async function main() {
   });
 }
 
-export async function sendTextMessage(_targetDate) {
+export async function sendTextMessage(_targetDate, isMention = false) {
   const filePath = `./schedules/${_targetDate.getFullYear()}-${String(_targetDate.getMonth() + 1).padStart(2, "0")}-${String(_targetDate.getDate()).padStart(2, "0")}.json`;
   const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
   let message = generateMessage(_targetDate, data);
 
-  sendMessage(message);
+  sendMessage(message, isMention);
 }
 
 function getJSTDate() {
