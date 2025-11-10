@@ -1,27 +1,38 @@
 import {
   Client,
+  Collection,
   Events,
   GatewayIntentBits,
+  REST,
+  Routes,
   SlashCommandBuilder,
 } from "discord.js";
 import dotenv from "dotenv";
 import fs from "fs";
 import cron from "node-cron";
 import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
-const CHANNEL_ID = "1369128482092617838";
+const CLIENT_ID = process.env.CLIENT_ID;
+const GUILD_ID = process.env.GUILD_ID;
+const CHANNEL_ID = process.env.CHANNEL_ID;
 
-const commandPath = path.join("./commands", "commands");
-const commandFiles = fs
-  .readdirSync(commandPath)
-  .filter((file) => file.endsWith(".js"));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
+
+client.commands = new Collection();
+
+const commandPath = path.join(__dirname, "commands");
+const commandFiles = fs
+  .readdirSync(commandPath)
+  .filter((file) => file.endsWith(".js"));
 
 async function sendMessage(text) {
   try {
@@ -43,14 +54,6 @@ async function sendMessage(text) {
   }
 }
 
-const command = () => {
-  for (const file of commandFiles) {
-    const filePath = path.join(commandPath, file);
-    const command = require(filePath);
-    client.commands.set(command.data.name, command);
-  }
-};
-
 async function main() {
   const now = getJSTDate();
 
@@ -63,6 +66,28 @@ async function main() {
 
   console.log("🚀 Starting bot...");
 
+  const commandsData = [];
+
+  for (const file of commandFiles) {
+    const filePath = path.join(commandPath, file);
+    const { command } = await import(filePath);
+    client.commands.set(command.data.name, command);
+    commandsData.push(command.data.toJSON());
+  }
+
+  const rest = new REST({ version: "10" }).setToken(DISCORD_TOKEN);
+
+  try {
+    console.log(`Refreshing ${commandsData.length} commands`);
+    await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), {
+      body: commandsData,
+    });
+
+    console.log(`✅ Commands refreshed`);
+  } catch (err) {
+    console.error("❌ Failed to refresh commands:", err);
+  }
+
   await client.login(DISCORD_TOKEN);
   console.log("🔑 Login successful!");
 
@@ -72,8 +97,6 @@ async function main() {
   cron.schedule("15 16 * * 0-4", () => {
     sendTextMessage(tomorrow);
   });
-
-  command();
 
   // コマンドが送られてきた際の処理
   client.on(Events.InteractionCreate, async (interaction) => {
@@ -107,7 +130,7 @@ async function main() {
   });
 }
 
-function sendTextMessage(_targetDate) {
+export async function sendTextMessage(_targetDate) {
   const filePath = `./schedules/${_targetDate.getFullYear()}-${String(_targetDate.getMonth() + 1).padStart(2, "0")}-${String(_targetDate.getDate()).padStart(2, "0")}.json`;
   const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
