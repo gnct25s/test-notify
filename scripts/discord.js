@@ -7,6 +7,7 @@ import {
 import dotenv from "dotenv";
 import fs from "fs";
 import cron from "node-cron";
+import path from "path";
 
 dotenv.config();
 
