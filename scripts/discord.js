@@ -1,4 +1,9 @@
-import { Client, Events, GatewayIntentBits } from "discord.js";
+import {
+  Client,
+  Events,
+  GatewayIntentBits,
+  SlashCommandBuilder,
+} from "discord.js";
 import dotenv from "dotenv";
 import fs from "fs";
 import cron from "node-cron";
@@ -88,4 +93,21 @@ function generateMessage(_targetDate, _data) {
 main().catch((error) => {
   console.error("❌ Unexpected error:", error);
   process.exit(1);
+});
+
+client.on(Events.InteractionCreate, async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
+
+  if (interaction.commandName === "run") {
+    now = getJSTDate();
+
+    const filePath = `./schedules/${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}.json`;
+    const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+
+    let message = generateMessage(now, data);
+
+    sendMessage(message);
+  } else {
+    console.log("Command not found");
+  }
 });
