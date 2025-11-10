@@ -14,7 +14,7 @@ dotenv.config();
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 const CHANNEL_ID = "1369128482092617838";
 
-const commandPath = path.join(__dirname, "commands");
+const commandPath = path.join("./commands", "commands");
 const commandFiles = fs
   .readdirSync(commandPath)
   .filter((file) => file.endsWith(".js"));
