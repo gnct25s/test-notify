@@ -13,6 +13,11 @@ dotenv.config();
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 const CHANNEL_ID = "1369128482092617838";
 
+const commandPath = path.join(__dirname, "commands");
+const commandFiles = fs
+  .readdirSync(commandPath)
+  .filter((file) => file.endsWith(".js"));
+
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
@@ -37,22 +42,13 @@ async function sendMessage(text) {
   }
 }
 
-client.on(Events.InteractionCreate, async (interaction) => {
-  if (!interaction.isChatInputCommand()) return;
-
-  if (interaction.commandName === "run") {
-    now = getJSTDate();
-
-    const filePath = `./schedules/${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}.json`;
-    const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-
-    let message = generateMessage(now, data);
-
-    sendMessage(message);
-  } else {
-    console.log("Command not found");
+const command = () => {
+  for (const file of commandFiles) {
+    const filePath = path.join(commandPath, file);
+    const command = require(filePath);
+    client.commands.set(command.data.name, command);
   }
-});
+};
 
 async function main() {
   const now = getJSTDate();
@@ -74,6 +70,39 @@ async function main() {
 
   cron.schedule("15 16 * * 0-4", () => {
     sendTextMessage(tomorrow);
+  });
+
+  command();
+
+  // コマンドが送られてきた際の処理
+  client.on(Events.InteractionCreate, async (interaction) => {
+    // コマンドでなかった場合は処理せずさよなら。
+    if (!interaction.isChatInputCommand()) return;
+
+    const command = interaction.client.commands.get(interaction.commandName);
+
+    // 一致するコマンドがなかった場合
+    if (!command) {
+      console.error(
+        ` ${interaction.commandName} というコマンドは存在しません。`,
+      );
+      return;
+    }
+
+    try {
+      // コマンドを実行
+      await command.execute(interaction);
+    } catch (error) {
+      console.error(error);
+      await interaction.reply({
+        content: "コマンドを実行中にエラーが発生しました。",
+        ephemeral: true,
+      });
+    }
+  });
+
+  client.once(Events.ClientReady, (c) => {
+    console.log(`Ready! Logged in as ${c.user.tag}`);
   });
 }
 
