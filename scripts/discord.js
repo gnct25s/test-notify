@@ -57,8 +57,7 @@ async function sendMessage(text, isMention = false) {
 }
 
 async function main() {
-  const now = getJSTDate();
-
+  let now = getJSTDate();
   let tomorrow = new Date(now);
   tomorrow.setDate(now.getDate() + 1);
 
@@ -97,7 +96,12 @@ async function main() {
   console.log(`✅ Logged in as ${client.user.tag}`);
 
   cron.schedule("15 16 * * 0-4", () => {
-    sendTextMessage(tomorrow);
+    now = new Date();
+
+    tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    sendTextMessage(tomorrow, true);
   });
 
   // コマンドが送られてきた際の処理
