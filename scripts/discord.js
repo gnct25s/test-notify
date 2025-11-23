@@ -19,6 +19,7 @@ const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 const CLIENT_ID = process.env.CLIENT_ID;
 const GUILD_ID = process.env.GUILD_ID;
 const CHANNEL_ID = process.env.CHANNEL_ID;
+const OPERATION_USERID = process.env.OPERATION_USERID;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,7 +35,7 @@ const commandFiles = fs
   .readdirSync(commandPath)
   .filter((file) => file.endsWith(".js"));
 
-async function sendMessage(text, isMention = false) {
+async function sendMessage(text, isMention = false, mentionUser = "@everyone") {
   try {
     if (!client.isReady()) {
       console.warn("Client not ready yet, waiting...");
@@ -47,7 +48,7 @@ async function sendMessage(text, isMention = false) {
       return;
     }
 
-    const finalMessage = isMention ? `@everyone\n${text}` : text;
+    const finalMessage = isMention ? `<${mentionUser}>\n${text}` : text;
 
     await channel.send(finalMessage);
     console.log(`✅ Message sent: \n ${text}`);
@@ -137,9 +138,27 @@ async function main() {
 }
 
 export async function sendTextMessage(_targetDate, isMention = false) {
-  const filePath = `./schedules/${_targetDate.getFullYear()}-${String(_targetDate.getMonth() + 1).padStart(2, "0")}-${String(_targetDate.getDate()).padStart(2, "0")}.json`;
-  const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+  const url = `https://raw.githubusercontent.com/gnct25s/test-notify/refs/heads/main/schedules/${_targetDate.getFullYear()}-${String(_targetDate.getMonth() + 1).padStart(2, "0")}-${String(_targetDate.getDate()).padStart(2, "0")}.json`;
 
+  console.log("⬇️ Get Schedule Data from:");
+  console.log(` -> ${url}`);
+
+  const res = await fetch(url);
+
+  try {
+    const data = await res.json();
+  } catch (error) {
+    console.error(`⚠️ ERROR: Cannot get schedule from URL:`);
+    console.error(` -> ${error.message}`);
+
+    await sendMessage(
+      "予定データの取得に失敗しました。",
+      true,
+      `@${OPERATION_USERID}`,
+    );
+
+    return;
+  }
   let message = generateMessage(_targetDate, data);
 
   sendMessage(message, isMention);
