@@ -151,7 +151,11 @@ export async function sendTextMessage(_targetDate, isMention = false) {
     console.error(`⚠️ ERROR: Cannot get schedule from URL:`);
     console.error(` -> ${error.message}`);
 
-    await sendMessage("予定データの取得に失敗しました。", true, "@sora81dev");
+    await sendMessage(
+      "予定データの取得に失敗しました。",
+      true,
+      `@${OPERATION_USERID}`,
+    );
 
     return;
   }
