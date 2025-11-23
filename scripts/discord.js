@@ -138,6 +138,7 @@ async function main() {
 
 export async function sendTextMessage(_targetDate, isMention = false) {
   const url = `https://raw.githubusercontent.com/gnct25s/test-notify/refs/heads/main/schedules/${_targetDate.getFullYear()}-${String(_targetDate.getMonth() + 1).padStart(2, "0")}-${String(_targetDate.getDate()).padStart(2, "0")}.json`;
+  console.log(`DATA: ${url}`);
   const res = await fetch(url);
   const data = await res.json();
 
