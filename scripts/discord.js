@@ -47,7 +47,7 @@ async function sendMessage(text, isMention = false, mentionUser = "@everyone") {
       return;
     }
 
-    const finalMessage = isMention ? `${mentionUser}\n${text}` : text;
+    const finalMessage = isMention ? `<${mentionUser}>\n${text}` : text;
 
     await channel.send(finalMessage);
     console.log(`✅ Message sent: \n ${text}`);
