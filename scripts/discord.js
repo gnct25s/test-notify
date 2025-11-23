@@ -137,8 +137,9 @@ async function main() {
 }
 
 export async function sendTextMessage(_targetDate, isMention = false) {
-  const filePath = `./schedules/${_targetDate.getFullYear()}-${String(_targetDate.getMonth() + 1).padStart(2, "0")}-${String(_targetDate.getDate()).padStart(2, "0")}.json`;
-  const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+  const url = `https://raw.githubusercontent.com/gnct25s/test-notify/refs/heads/main/schedules/${_targetDate.getFullYear()}-${String(_targetDate.getMonth() + 1).padStart(2, "0")}-${String(_targetDate.getDate()).padStart(2, "0")}.json`;
+  const res = await fetch(url);
+  const data = await res.json();
 
   let message = generateMessage(_targetDate, data);
 
