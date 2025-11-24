@@ -162,7 +162,9 @@ export async function sendTextMessage(_targetDate, isMention = false) {
   }
   let message = generateMessage(_targetDate, data);
 
-  sendMessage(message, isMention);
+  await sendMessage(message, isMention);
+  
+  return;
 }
 
 function getJSTDate() {
