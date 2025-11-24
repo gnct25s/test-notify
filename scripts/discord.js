@@ -144,9 +144,10 @@ export async function sendTextMessage(_targetDate, isMention = false) {
   console.log(` -> ${url}`);
 
   const res = await fetch(url);
+  let data;
 
   try {
-    const data = await res.json();
+    data = await res.json();
   } catch (error) {
     console.error(`⚠️ ERROR: Cannot get schedule from URL:`);
     console.error(` -> ${error.message}`);
