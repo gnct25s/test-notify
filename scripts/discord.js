@@ -92,7 +92,7 @@ async function main() {
 
     console.log(`✅ Commands refreshed`);
   } catch (err) {
-    console.error("❌ Failed to refresh commands:", err);
+    console.error("⚠️ ERROR: Failed to refresh commands:", err);
   }
 
   await client.login(DISCORD_TOKEN);
