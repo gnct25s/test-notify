@@ -35,6 +35,12 @@ const commandFiles = fs
   .readdirSync(commandPath)
   .filter((file) => file.endsWith(".js"));
 
+let alreadyPostToday = false;
+
+export function setalreadyPostToday(value) {
+  alreadyPostToday = value;
+}
+
 async function sendMessage(text, isMention = false, mentionUser = "@everyone") {
   try {
     if (!client.isReady()) {
@@ -102,7 +108,13 @@ async function main() {
     tomorrow = new Date(now);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    sendTextMessage(tomorrow, true);
+    if (!alreadyPostToday) {
+      sendTextMessage(tomorrow, true);
+    }
+  });
+
+  cron.schedule("05 00 * * *", () => {
+    alreadyPostToday = false;
   });
 
   // コマンドが送られてきた際の処理
