@@ -1,8 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
 import { sendTextMessage, setalreadyPostToday } from "../discord.js";
 
-let alreadyPostToday;
-
 export const command = {
   data: new SlashCommandBuilder()
     .setName("printwm")
