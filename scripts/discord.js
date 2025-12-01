@@ -5,7 +5,6 @@ import {
   GatewayIntentBits,
   REST,
   Routes,
-  SlashCommandBuilder,
 } from "discord.js";
 import dotenv from "dotenv";
 import fs from "fs";
@@ -175,7 +174,7 @@ export async function sendTextMessage(_targetDate, isMention = false) {
   let message = generateMessage(_targetDate, data);
 
   await sendMessage(message, isMention);
-  
+
   return;
 }
 
