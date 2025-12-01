@@ -156,9 +156,10 @@ export async function sendTextMessage(_targetDate, isMention = false) {
   console.log(` -> ${url}`);
 
   const res = await fetch(url);
+  let data;
 
   try {
-    const data = await res.json();
+    data = await res.json();
   } catch (error) {
     console.error(`⚠️ ERROR: Cannot get schedule from URL:`);
     console.error(` -> ${error.message}`);
@@ -173,7 +174,9 @@ export async function sendTextMessage(_targetDate, isMention = false) {
   }
   let message = generateMessage(_targetDate, data);
 
-  sendMessage(message, isMention);
+  await sendMessage(message, isMention);
+  
+  return;
 }
 
 function getJSTDate() {
