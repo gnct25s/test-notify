@@ -6,7 +6,7 @@ let alreadyPostToday;
 export const command = {
   data: new SlashCommandBuilder()
     .setName("printwm")
-    .setDescription("Print todays data force"),
+    .setDescription("Print todays data force with mention everyone."),
 
   async execute(interaction) {
     const now = new Date();
