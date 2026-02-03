@@ -204,7 +204,7 @@ function generateMessage(_targetDate, _data) {
 
   message = `[${_targetDate.getFullYear()}-${String(_targetDate.getMonth() + 1).padStart(2, "0")}-${String(_targetDate.getDate()).padStart(2, "0")}の予定]\n`;
 
-  for (let i = 1; i <= _data.data.class; i++) {
+  for (let i = 1; i <= 4; i++) {
     const content = _data.text[String(i)] || "";
     message += `${i}限: ${content}\n`;
   }
