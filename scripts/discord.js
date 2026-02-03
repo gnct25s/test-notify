@@ -149,7 +149,7 @@ async function main() {
 }
 
 export async function sendTextMessage(_targetDate, isMention = false) {
-  const url = `https://raw.githubusercontent.com/gnct25s/test-notify/refs/heads/main/schedules/${_targetDate.getFullYear()}-${String(_targetDate.getMonth() + 1).padStart(2, "0")}-${String(_targetDate.getDate()).padStart(2, "0")}.json`;
+  const url = `https://test-notice-worker.sora81dev.workers.dev/api/schedule/get?date=${_targetDate.getFullYear()}-${String(_targetDate.getMonth() + 1).padStart(2, "0")}-${String(_targetDate.getDate()).padStart(2, "0")}`;
 
   console.log("⬇️ Get Schedule Data from:");
   console.log(` -> ${url}`);
@@ -159,6 +159,19 @@ export async function sendTextMessage(_targetDate, isMention = false) {
 
   try {
     data = await res.json();
+
+    if (data.error) {
+      console.error(`⚠️ ERROR: Cannot get schedule from URL:`);
+      console.error(` -> ${data.error}`);
+
+      await sendMessage(
+        "予定データが登録されていません。",
+        true,
+        `@${OPERATION_USERID}`,
+      );
+
+      return;
+    }
   } catch (error) {
     console.error(`⚠️ ERROR: Cannot get schedule from URL:`);
     console.error(` -> ${error.message}`);
