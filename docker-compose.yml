@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-  mc-server:
+  test-notice:
     container_name: docker-test-notice
     build:
       dockerfile: ./Dockerfile
