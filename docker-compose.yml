@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   test-notice:
-    container_name: docker-test-notice
+    container_name: test-notice
     stdin_open: true
     tty: true
     build:
