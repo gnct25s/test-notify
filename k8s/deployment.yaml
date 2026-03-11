@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: test-notice-container
-        image: 192.168.100.123:5000/test-notice:latest
+        image: 192.168.100.123:5000/test-notice-app:latest
         envFrom:
         - secretRef:
             name: test-notice-secret
