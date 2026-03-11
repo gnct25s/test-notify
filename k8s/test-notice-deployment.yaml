@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: /Users/sora81dev/.asdf/installs/kompose/1.38.0/bin/kompose convert -f ../docker-compose.yml --volumes=hostPath
+    kompose.version: 1.38.0 (a8f5d1cbd)
+  labels:
+    io.kompose.service: test-notice
+  name: test-notice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: test-notice
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: /Users/sora81dev/.asdf/installs/kompose/1.38.0/bin/kompose convert -f ../docker-compose.yml --volumes=hostPath
+        kompose.version: 1.38.0 (a8f5d1cbd)
+      labels:
+        io.kompose.service: test-notice
+    spec:
+      containers:
+        - image: test-notice
+          name: test-notice
+          stdin: true
+          tty: true
+      restartPolicy: Always
