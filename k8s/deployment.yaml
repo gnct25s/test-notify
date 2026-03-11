@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       labels:
-        app: node-app
+        app: test-notice-app
 
     spec:
       containers:
