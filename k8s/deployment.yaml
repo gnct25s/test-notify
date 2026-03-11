@@ -6,7 +6,7 @@ metadata:
   name: test-notice-deployment
   namespace: test-notice
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: test-notice-app
@@ -19,6 +19,9 @@ spec:
       containers:
       - name: test-notice-container
         image: 192.168.100.123:5000/test-notice:latest
+        envForm:
+        - secretRef:
+            name: test-notice-secret
         ports:
         - containerPort: 3000
         imagePullPolicy: IfNotPresent
