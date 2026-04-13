@@ -12,7 +12,10 @@ export const command = {
     tomorrow.setDate(now.getDate() + 1);
 
     await sendTextMessage(tomorrow, true);
-    await interaction.reply("Data printed successfully!");
+    await interaction.reply({
+        content: "Data printed successfully!",
+        ephemeral: true,
+        });
 
     setalreadyPostToday(true);
   },
