@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
+import { MessageFlags, SlashCommandBuilder } from "discord.js";
 import { sendTextMessage } from "../discord.js";
 
 export const command = {
@@ -13,8 +13,8 @@ export const command = {
 
     await sendTextMessage(tomorrow);
     await interaction.reply({
-        content: "Data printed successfully!",
-        ephemeral: true,
+      content: "Data printed successfully!",
+      MessageFlags: MessageFlags.Ephemeral,
     });
   },
 };
