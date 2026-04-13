@@ -17,14 +17,14 @@ spec:
 
     spec:
       containers:
-      - name: test-notice-container
-        image: 192.168.100.123:5000/test-notice-app:latest
-        env:
-        - name: TZ
-          value: "Asia/Tokyo"
-        envFrom:
-        - secretRef:
-            name: test-notice-secret
-        ports:
-        - containerPort: 3000
-        imagePullPolicy: IfNotPresent
+        - name: test-notice-container
+          image: 192.168.100.123:5000/test-notice-app:v2.1.2-rc1
+          env:
+            - name: TZ
+              value: "Asia/Tokyo"
+          envFrom:
+            - secretRef:
+                name: test-notice-secret
+          ports:
+            - containerPort: 3000
+          imagePullPolicy: IfNotPresent
