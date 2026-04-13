@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: test-notice-container
-          image: 192.168.100.123:5000/test-notice-app:v2.2.0-rc1
+          image: 192.168.100.123:5000/test-notice-app:v2.2.0-rc2
           env:
             - name: TZ
               value: "Asia/Tokyo"
