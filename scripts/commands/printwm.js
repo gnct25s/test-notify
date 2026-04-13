@@ -15,7 +15,7 @@ export const command = {
     await interaction.reply({
         content: "Data printed successfully!",
         ephemeral: true,
-        });
+    });
 
     setalreadyPostToday(true);
   },
