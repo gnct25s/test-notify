@@ -13,8 +13,8 @@ export const command = {
 
     await sendTextMessage(tomorrow, true);
     await interaction.reply({
-        content: "Data printed successfully!",
-        ephemeral: true,
+      content: "Data printed successfully!",
+      ephemeral: true,
     });
 
     setalreadyPostToday(true);
