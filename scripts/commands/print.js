@@ -13,7 +13,7 @@ export const command = {
 
     await sendTextMessage(tomorrow);
     await interaction.reply({
-        content:"Data printed successfully!",
+        content: "Data printed successfully!",
         ephemeral: true,
     });
   },
