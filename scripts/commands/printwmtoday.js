@@ -3,7 +3,7 @@ import { sendTextMessage } from "../discord.js";
 
 export const command = {
   data: new SlashCommandBuilder()
-    .setName("printwm")
+    .setName("printwmtoday")
     .setDescription("Print todays data force with mention everyone."),
 
   async execute(interaction) {
