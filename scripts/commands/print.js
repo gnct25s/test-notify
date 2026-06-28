@@ -4,7 +4,7 @@ import { sendTextMessage } from "../discord.js";
 export const command = {
   data: new SlashCommandBuilder()
     .setName("print")
-    .setDescription("Print todays data force"),
+    .setDescription("Print tomorrows data force"),
 
   async execute(interaction) {
     const now = new Date();

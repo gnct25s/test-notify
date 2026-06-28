@@ -4,7 +4,7 @@ import { sendTextMessage, setalreadyPostToday } from "../discord.js";
 export const command = {
   data: new SlashCommandBuilder()
     .setName("printwm")
-    .setDescription("Print todays data force with mention everyone."),
+    .setDescription("Print tomorrow data force with mention everyone."),
 
   async execute(interaction) {
     const now = new Date();
