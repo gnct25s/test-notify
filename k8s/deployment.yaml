@@ -25,6 +25,4 @@ spec:
           envFrom:
             - secretRef:
                 name: test-notice-secret
-          ports:
-            - containerPort: 3000
           imagePullPolicy: IfNotPresent
