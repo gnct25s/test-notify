@@ -2,27 +2,27 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: test-notice-app
-  name: test-notice-deployment
+    app: discord-bot
+  name: discord-bot
   namespace: test-notice
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: test-notice-app
+      app: discord-bot
   template:
     metadata:
       labels:
-        app: test-notice-app
+        app: discord-bot
 
     spec:
       containers:
-        - name: test-notice-container
+        - name: discord-bot
           image: ghcr.io/gnct25s/test-notice-bot:v2.3.0
           env:
             - name: TZ
               value: "Asia/Tokyo"
           envFrom:
             - secretRef:
-                name: test-notice-secret
+                name: discord-bot
           imagePullPolicy: IfNotPresent
