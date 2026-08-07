@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   test-notice:
-    image: ghcr.io/gnct25s/test-notice-bot:2.4.0-rc1
+    image: ghcr.io/gnct25s/test-notice-bot:2.4.0
     container_name: test-notice
     stdin_open: true
     tty: true
