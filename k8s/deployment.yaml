@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: discord-bot
-          image: ghcr.io/gnct25s/test-notice-bot:v2.3.0
+          image: ghcr.io/gnct25s/test-notice-bot:v2.3.1-rc1
           env:
             - name: TZ
               value: "Asia/Tokyo"
