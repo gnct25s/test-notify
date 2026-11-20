@@ -32,6 +32,8 @@ $ npm run send
 |`GUILD_ID`|DiscordのギルドID（`discord.js`使用時のみ）|
 |`CLIENT_ID`|DiscordのクライアントID（`discord.js`使用時のみ）|
 |`CHANNEL_ID`|テストの通知を受け取るチャンネル（`discord.js`使用時のみ）|
+|`OPERATION_USERID`|予定が未登録・取得失敗のときにメンションする運用者（`discord.js`使用時のみ）|
+|`API_ENDPOINT`|test-notice-api v2 のURL（省略時は本番 `https://test-notice-worker.sora81dev.workers.dev/api/v2`）|
 
 ## LICENCE
 Copyright (c) 2025 sora81dev, gnct25s All Rights Reserved.

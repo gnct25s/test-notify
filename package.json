@@ -8,6 +8,7 @@
   },
   "scripts": {
     "send": "node scripts/send-msg.js",
-    "discord": "node scripts/discord.js"
+    "discord": "node scripts/discord.js",
+    "test": "node --test 'scripts/**/*.test.js'"
   }
 }

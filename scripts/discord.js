@@ -11,6 +11,8 @@ import fs from "fs";
 import cron from "node-cron";
 import path from "path";
 import { fileURLToPath } from "url";
+import { API_ENDPOINT, fetchSchedule, fetchSubjects } from "./api.js";
+import { formatDate, generateScheduleMessage } from "./message.js";
 
 dotenv.config();
 
@@ -149,31 +151,24 @@ async function main() {
 }
 
 export async function sendTextMessage(_targetDate, isMention = false) {
-  const url = `https://test-notice-worker.sora81dev.workers.dev/api/schedule/get?date=${_targetDate.getFullYear()}-${String(_targetDate.getMonth() + 1).padStart(2, "0")}-${String(_targetDate.getDate()).padStart(2, "0")}`;
+  const date = formatDate(_targetDate);
 
-  console.log("⬇️ Get Schedule Data from:");
-  console.log(` -> ${url}`);
+  console.log(`⬇️ Get Schedule Data for ${date} from ${API_ENDPOINT}`);
 
-  const res = await fetch(url);
-  let data;
+  let schedule;
+  let subjects;
 
   try {
-    data = await res.json();
-
-    if (data.error) {
-      console.error(`⚠️ ERROR: Cannot get schedule from URL:`);
-      console.error(` -> ${data.error}`);
-
-      await sendMessage(
-        "予定データが登録されていません。",
-        true,
-        `@${OPERATION_USERID}`,
-      );
-
-      return;
-    }
+    [schedule, subjects] = await Promise.all([
+      fetchSchedule(date),
+      // subject names are nice-to-have: fall back to "#id" rather than skipping the notice
+      fetchSubjects().catch((error) => {
+        console.warn(`⚠️ Cannot get subjects, showing IDs: ${error.message}`);
+        return [];
+      }),
+    ]);
   } catch (error) {
-    console.error(`⚠️ ERROR: Cannot get schedule from URL:`);
+    console.error(`⚠️ ERROR: Cannot get schedule from API:`);
     console.error(` -> ${error.message}`);
 
     await sendMessage(
@@ -184,11 +179,22 @@ export async function sendTextMessage(_targetDate, isMention = false) {
 
     return;
   }
-  let message = generateMessage(_targetDate, data);
+
+  if (!schedule) {
+    console.error(`⚠️ ERROR: No schedule registered for ${date}`);
+
+    await sendMessage(
+      `${date} の予定データが登録されていません。`,
+      true,
+      `@${OPERATION_USERID}`,
+    );
+
+    return;
+  }
+
+  const message = generateScheduleMessage(date, schedule, subjects);
 
   await sendMessage(message, isMention);
-
-  return;
 }
 
 function getJSTDate() {
@@ -197,19 +203,6 @@ function getJSTDate() {
   const jst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
 
   return now;
-}
-
-function generateMessage(_targetDate, _data) {
-  let message = "";
-
-  message = `[${_targetDate.getFullYear()}-${String(_targetDate.getMonth() + 1).padStart(2, "0")}-${String(_targetDate.getDate()).padStart(2, "0")}の予定]\n`;
-
-  for (let i = 1; i <= 4; i++) {
-    const content = _data[`period_${i}`] || ""; // period_1, period_2 ... にアクセス
-    message += `${i}限: ${content}\n`;
-  }
-
-  return message.trim();
 }
 
 main().catch((error) => {
