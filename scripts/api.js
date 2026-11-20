@@ -53,3 +53,16 @@ export async function fetchSubjects(fetcher = fetch) {
   const json = await getJson("/subject?include_archived=1", fetcher);
   return json.subjects;
 }
+
+/**
+ * Assignments ordered by deadline (nearest first).
+ * @param {{ count?: number, since?: string }} options `since` is JST "YYYY-MM-DD HH:MM:SS"
+ * @returns {Promise<Array<{ id: number, subject_id: number, title: string, content: string | null, method: string | null, deadline: string }>>}
+ */
+export async function fetchAssignments({ count = 5, since } = {}, fetcher = fetch) {
+  const params = new URLSearchParams({ count: String(count) });
+  if (since) params.set("since", since);
+
+  const json = await getJson(`/assignment/data?${params}`, fetcher);
+  return json.assignments;
+}

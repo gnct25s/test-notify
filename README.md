@@ -15,6 +15,14 @@
 $ npm run discord
 ```
 
+## コマンド
+|コマンド|内容|
+|-|-|
+|`/assignments [count]`|締切が近い課題を表示（既定5件、最大10件）|
+|`/print` `/printtoday`|明日・今日の予定を投稿|
+|`/printwm` `/printwmtoday`|明日・今日の予定を @everyone 付きで投稿|
+|`/ping`|疎通確認|
+
 ## `.env`の設定
 |項目|内容|
 |-|-|
