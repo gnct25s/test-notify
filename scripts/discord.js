@@ -3,6 +3,7 @@ import {
   Collection,
   Events,
   GatewayIntentBits,
+  MessageFlags,
   REST,
   Routes,
 } from "discord.js";
@@ -12,7 +13,12 @@ import cron from "node-cron";
 import path from "path";
 import { fileURLToPath } from "url";
 import { API_ENDPOINT, fetchSchedule, fetchSubjects } from "./api.js";
-import { formatDate, generateScheduleMessage } from "./message.js";
+import {
+  TIMEZONE,
+  generateScheduleMessage,
+  jstDate,
+  jstDateTime,
+} from "./message.js";
 
 dotenv.config();
 
@@ -65,13 +71,7 @@ async function sendMessage(text, isMention = false, mentionUser = "@everyone") {
 }
 
 async function main() {
-  let now = getJSTDate();
-  let tomorrow = new Date(now);
-  tomorrow.setDate(now.getDate() + 1);
-
-  console.log(
-    `--- ${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, "0")}/${String(now.getDate()).padStart(2, "0")} ${now.getHours()} : ${now.getMinutes()} ---`,
-  );
+  console.log(`--- ${jstDateTime()} (JST) ---`);
 
   console.log("🚀 Starting bot...");
 
@@ -103,20 +103,25 @@ async function main() {
   await new Promise((resolve) => client.once(Events.ClientReady, resolve));
   console.log(`✅ Logged in as ${client.user.tag}`);
 
-  cron.schedule("15 16 * * 0-4", () => {
-    now = new Date();
+  // Times are JST regardless of the host / container time zone.
+  // Sun–Thu 16:15: post tomorrow's (Mon–Fri) schedule.
+  cron.schedule(
+    "15 16 * * 0-4",
+    () => {
+      if (!alreadyPostToday) {
+        sendTextMessage(jstDate(1), true);
+      }
+    },
+    { timezone: TIMEZONE },
+  );
 
-    tomorrow = new Date(now);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    if (!alreadyPostToday) {
-      sendTextMessage(tomorrow, true);
-    }
-  });
-
-  cron.schedule("05 00 * * *", () => {
-    alreadyPostToday = false;
-  });
+  cron.schedule(
+    "05 00 * * *",
+    () => {
+      alreadyPostToday = false;
+    },
+    { timezone: TIMEZONE },
+  );
 
   // コマンドが送られてきた際の処理
   client.on(Events.InteractionCreate, async (interaction) => {
@@ -138,10 +143,15 @@ async function main() {
       await command.execute(interaction);
     } catch (error) {
       console.error(error);
-      await interaction.reply({
-        content: "コマンドを実行中にエラーが発生しました。",
-        ephemeral: true,
-      });
+      const content = "コマンドを実行中にエラーが発生しました。";
+      // commands may have deferred already; reply() would throw in that case
+      if (interaction.deferred || interaction.replied) {
+        await interaction.editReply(content).catch(console.error);
+      } else {
+        await interaction
+          .reply({ content, flags: MessageFlags.Ephemeral })
+          .catch(console.error);
+      }
     }
   });
 
@@ -150,9 +160,8 @@ async function main() {
   });
 }
 
-export async function sendTextMessage(_targetDate, isMention = false) {
-  const date = formatDate(_targetDate);
-
+/** @param {string} date "YYYY-MM-DD" (JST calendar date, see jstDate) */
+export async function sendTextMessage(date, isMention = false) {
   console.log(`⬇️ Get Schedule Data for ${date} from ${API_ENDPOINT}`);
 
   let schedule;
@@ -195,14 +204,6 @@ export async function sendTextMessage(_targetDate, isMention = false) {
   const message = generateScheduleMessage(date, schedule, subjects);
 
   await sendMessage(message, isMention);
-}
-
-function getJSTDate() {
-  const now = new Date();
-
-  const jst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
-
-  return now;
 }
 
 main().catch((error) => {

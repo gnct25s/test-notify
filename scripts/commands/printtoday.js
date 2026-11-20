@@ -1,5 +1,6 @@
-import { SlashCommandBuilder } from "discord.js";
+import { MessageFlags, SlashCommandBuilder } from "discord.js";
 import { sendTextMessage } from "../discord.js";
+import { jstDate } from "../message.js";
 
 export const command = {
   data: new SlashCommandBuilder()
@@ -7,12 +8,11 @@ export const command = {
     .setDescription("Print todays data force"),
 
   async execute(interaction) {
-    const now = new Date();
+    // Fetching from the API can exceed Discord's 3s reply limit, so acknowledge first.
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-    await sendTextMessage(now);
-    await interaction.reply({
-      content: "Data printed successfully!",
-      ephemeral: true,
-    });
+    await sendTextMessage(jstDate(0));
+
+    await interaction.editReply("Data printed successfully!");
   },
 };

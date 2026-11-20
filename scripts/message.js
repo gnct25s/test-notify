@@ -3,9 +3,25 @@
 /** Number of periods always shown, even when empty. */
 export const DEFAULT_PERIODS = 4;
 
-/** Date -> "YYYY-MM-DD" using the Date's local fields. */
-export function formatDate(date) {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+export const TIMEZONE = "Asia/Tokyo";
+
+const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
+const pad = (n) => String(n).padStart(2, "0");
+
+/**
+ * JST calendar date "YYYY-MM-DD", `offsetDays` days from `now`.
+ * Independent of the host time zone (Docker images usually run in UTC).
+ */
+export function jstDate(offsetDays = 0, now = new Date()) {
+  const jst = new Date(now.getTime() + JST_OFFSET_MS);
+  jst.setUTCDate(jst.getUTCDate() + offsetDays);
+  return `${jst.getUTCFullYear()}-${pad(jst.getUTCMonth() + 1)}-${pad(jst.getUTCDate())}`;
+}
+
+/** "YYYY-MM-DD HH:MM" in JST, for logs. */
+export function jstDateTime(now = new Date()) {
+  const jst = new Date(now.getTime() + JST_OFFSET_MS);
+  return `${jstDate(0, now)} ${pad(jst.getUTCHours())}:${pad(jst.getUTCMinutes())}`;
 }
 
 /** "倫理 — 微分" / "倫理" / "微分" / "" for one period. Subject 0 means "no class". */

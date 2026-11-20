@@ -2,9 +2,10 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { fetchSchedule, fetchSubjects } from "./api.js";
 import {
-  formatDate,
   formatPeriod,
   generateScheduleMessage,
+  jstDate,
+  jstDateTime,
 } from "./message.js";
 
 const subjects = [
@@ -12,9 +13,19 @@ const subjects = [
   { id: 21, name: "数学A1", color: "#bfdbfe", sort_order: 0, archived: false },
 ];
 
-describe("formatDate", () => {
-  it("zero-pads", () => {
-    assert.equal(formatDate(new Date(2026, 0, 5)), "2026-01-05");
+describe("jstDate", () => {
+  // 2026-11-20 23:30 UTC = 2026-11-21 08:30 JST
+  const now = new Date("2026-11-20T23:30:00Z");
+
+  it("uses the JST calendar date, not the host one", () => {
+    assert.equal(jstDate(0, now), "2026-11-21");
+    assert.equal(jstDate(1, now), "2026-11-22");
+    assert.equal(jstDateTime(now), "2026-11-21 08:30");
+  });
+
+  it("crosses month and year boundaries", () => {
+    assert.equal(jstDate(1, new Date("2026-11-30T03:00:00Z")), "2026-12-01");
+    assert.equal(jstDate(1, new Date("2026-12-31T03:00:00Z")), "2027-01-01");
   });
 });
 
