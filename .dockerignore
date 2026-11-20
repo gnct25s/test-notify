@@ -1,1 +1,9 @@
 node_modules
+# secrets must never be baked into the image
+.env
+.env.*
+.git
+.github
+k8s
+docker-compose.yml
+scripts/**/*.test.js

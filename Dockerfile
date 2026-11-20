@@ -1,9 +1,12 @@
-FROM node:20
+FROM node:24-slim
 
+ENV NODE_ENV=production
 WORKDIR /test-notice
 
 COPY package*.json ./
-RUN npm install
+RUN npm ci --omit=dev
 
 COPY . .
+
+USER node
 CMD ["npm", "run", "discord"]
